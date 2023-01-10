@@ -3,10 +3,13 @@ package hello.hellospring.service;
 import hello.hellospring.domain.Member;
 import hello.hellospring.repository.MemberRepository;
 import hello.hellospring.repository.MemoryMemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class MemberService {
     /*
         회원 서비스란?
@@ -16,6 +19,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     // Constructor 단축키 : alt + insert
+    @Autowired
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;  // 생성자를 이용해 외부에서 주입하기
     }
