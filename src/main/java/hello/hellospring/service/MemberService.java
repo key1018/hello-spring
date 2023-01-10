@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Service // 빈 생성
 public class MemberService {
     /*
         회원 서비스란?
