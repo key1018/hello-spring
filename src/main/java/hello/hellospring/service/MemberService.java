@@ -6,6 +6,7 @@ import hello.hellospring.repository.MemoryMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class MemberService {
     /**
      * 회원 가입
      */
-    public Long join(Member member) {
+    public Long join(Member member) throws SQLException {
         // 조건 : 같은 이름이 있는 회원은 중복 가입x
         validateDuplicateMember(member); // 중복 회원 검증
 

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Controller
@@ -48,7 +49,7 @@ public class MemberController {
      */
 
     @PostMapping("/members/new") // url은 동일하지만 html에서 post방식으로 전달했기 때문에 해당 메소드가 값을 전달받음
-    public String create(MemberForm form){
+    public String create(MemberForm form) throws SQLException {
         Member member = new Member();
         member.setName(form.getName());
 

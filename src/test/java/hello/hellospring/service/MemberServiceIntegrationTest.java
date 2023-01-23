@@ -3,41 +3,35 @@ package hello.hellospring.service;
 import hello.hellospring.domain.Member;
 import hello.hellospring.repository.MemberRepository;
 import hello.hellospring.repository.MemoryMemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
-import java.util.Optional;
 
-// 단축키 : alt + enter
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
-class MemberServiceTest {
+@SpringBootTest // 스프링을 테스트할 때는 해당 어노테이션을 통해 쉽게 테스트 할 수 있다.
+@Transactional
+/*
+테스트 케이스에 @Transactional를 붙이면, 테스트 시작 전에 트랜잭션을 시작하고, 테스트 완료 후에 항상 rollback함
+단, 서비스나 컨트롤러에 붙으면 rollback하지않고 정상적으로 작동한다.
+만약 rollback하지 않으려면 @Commit을 붙이면 됨
+=> 다음 테스트를 반복해서 진핼할 수 있다.
+ */
+class MemberServiceIntegrationTest {
 
-    MemberService memberService;
-    MemoryMemberRepository memberRepository;
+    @Autowired MemberService memberService;
+    @Autowired MemberRepository memberRepository;
     /*
     MemoryMemberRepository memberRepository = new MemoryMemberRepository();
     => new로 다른 객체 리파지토리가 생성되면 다른 인스턴스이기 때문에 내용물이 달라질 수 있다.
        그러므로 같은 리파지토리를 이용하도록 설정해야된다!
     */
-
-    @BeforeEach
-    public void beforeEach(){
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-        // 테스트가 실행될 때마다 MemberService와 같은 메모리 리퍼지토리가 사용된다.
-    }
-
-    @AfterEach
-    public void afterEach(){
-       memberRepository.clearStore();
-    }
 
     @Test
     void 회원가입() throws SQLException {
@@ -67,18 +61,6 @@ class MemberServiceTest {
 
         // when
         memberService.join(member1);
-        // memberService.join(member2); // 이름이 동일하므로 예외가 발생해야됨
-
-        // then
-        /*
-         예외처리 방법1
-        try {
-            memberService.join(member2);
-            fail();
-        } catch (IllegalStateException e) {
-            assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
-        }
-        */
 
         // 예외처리 방법2
         IllegalStateException e = assertThrows(IllegalStateException.class, () -> memberService.join(member2));
@@ -87,11 +69,5 @@ class MemberServiceTest {
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
     }
 
-    @Test
-    void findMembers() {
-    }
 
-    @Test
-    void findOne() {
-    }
 }
