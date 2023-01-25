@@ -30,6 +30,7 @@ public class MemberService {
      * 회원 가입
      */
     public Long join(Member member) throws SQLException {
+
         // 조건 : 같은 이름이 있는 회원은 중복 가입x
         validateDuplicateMember(member); // 중복 회원 검증
 
